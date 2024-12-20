@@ -1,0 +1,33 @@
+.homepage-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #202020;
+}
+
+.homepage-container .input-container input {
+  font-size: 20px;
+  display: block;
+  padding: 10px 20px;
+  margin: 10px 0px;
+  border: 1px solid black;
+  color: white;
+  background: #474747;
+  border-radius: 50px;
+}
+
+.homepage-container .input-container button{
+  display: block;
+  font-size: 20px;
+  width: 100%;
+  padding: 10px 20px;
+  cursor: pointer;
+  background-color: rgb(232, 88, 88);
+  border-radius: 50px;
+}
+
+.homepage-container .input-container button:hover{
+  background-color: rgb(198, 71, 71);
+}
