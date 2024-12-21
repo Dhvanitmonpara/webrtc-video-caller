@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useSocket } from "../providers/Socket";
 import { usePeer } from "../providers/Peer";
 import ReactPlayer from "react-player";
+import toast, { Toaster } from "react-hot-toast";
 
 function Roompage() {
   const { socket } = useSocket();
@@ -23,6 +24,7 @@ function Roompage() {
       const offer = await createOffer();
       socket.emit("call-user", { emailId, offer });
       setRemoteEmailId(emailId);
+      toast(`User with email ${emailId} joined the room`);
     },
     [createOffer, socket]
   );
@@ -32,6 +34,7 @@ function Roompage() {
       const ans = await createAnswer(offer);
       socket.emit("call-accepted", { emailId: from, answer: ans });
       setRemoteEmailId(from);
+      toast(`Incoming call from ${from}`);
     },
     [createAnswer, socket]
   );
@@ -51,11 +54,40 @@ function Roompage() {
   );
 
   const getUserMediaStream = useCallback(async () => {
-    const stream = await navigator.mediaDevices.getUserMedia({
-      audio: true,
-      video: true,
-    });
-    setMyStream(stream);
+    try {
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const hasVideoInput = devices.some((device) => device.kind === "videoinput");
+      const hasAudioInput = devices.some((device) => device.kind === "audioinput");
+  
+      if (!hasVideoInput) {
+        toast.error("No camera found on this device.");
+        return;
+      }
+  
+      if (!hasAudioInput) {
+        toast.error("No microphone found on this device.");
+        return;
+      }
+  
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+        video: true,
+      });
+      setMyStream(stream);
+    } catch (error) {
+      if (error.name === "NotReadableError") {
+        toast.error("The camera or microphone is already in use by another application.");
+      } else if (error.name === "NotAllowedError") {
+        toast.error("Permission to access the camera or microphone was denied.");
+      } else if (error.name === "NotFoundError") {
+        toast.error("No camera or microphone was found on this device.");
+      } else if (error.name === "OverconstrainedError") {
+        toast.error("Device constraints are too specific. Adjust your settings.");
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
+        console.error("Error accessing media devices:", error);
+      }
+    }
   }, []);
 
   useEffect(() => {
@@ -84,7 +116,6 @@ function Roompage() {
 
   return (
     <div className="roompage-container">
-      <h1>Room page</h1>
       <h4>
         {remoteEmailId
           ? `You are connected to ${remoteEmailId}.`
@@ -93,6 +124,15 @@ function Roompage() {
       <button onClick={() => sendStream(myStream)}>Send Stream</button>
       <ReactPlayer url={myStream} playing muted />
       <ReactPlayer url={remoteStream} playing />
+      <Toaster
+        position={window.innerWidth >= 1024 ? "bottom-right" : "top-center"}
+        toastOptions={{
+          style: {
+            background: "#fff",
+            color: "#333",
+          },
+        }}
+      />
     </div>
   );
 }

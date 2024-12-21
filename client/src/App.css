@@ -2,9 +2,15 @@
   width: 100vw;
   height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   background: #202020;
+}
+
+.homepage-container h1 {
+  color: white;
+  margin-bottom: 30px;
 }
 
 .homepage-container .input-container input {
@@ -24,10 +30,43 @@
   width: 100%;
   padding: 10px 20px;
   cursor: pointer;
+  transition: background-color 0.3s;
   background-color: rgb(232, 88, 88);
   border-radius: 50px;
 }
 
 .homepage-container .input-container button:hover{
+  background-color: rgb(198, 71, 71);
+}
+
+/* roompage styling */
+
+.roompage-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #202020;
+}
+
+.roompage-container h4 {
+  color: white;
+}
+
+.roompage-container button {
+  display: block;
+  font-size: 20px;
+  width: 200px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-bottom: 30px;
+  background-color: rgb(232, 88, 88);
+  border-radius: 50px;
+}
+
+.roompage-container button:hover{
   background-color: rgb(198, 71, 71);
 }

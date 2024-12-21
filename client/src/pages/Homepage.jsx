@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useSocket } from "../providers/Socket";
 import { useNavigate } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 
 function Homepage() {
   const { socket } = useSocket();
 
-  const [email, setEmail] = useState();
-  const [room, setRoom] = useState();
+  const [email, setEmail] = useState("");
+  const [room, setRoom] = useState("");
 
   const navigate = useNavigate();
 
@@ -32,6 +33,7 @@ function Homepage() {
 
   return (
     <div className="homepage-container">
+      <h1>Welcome to Room chat</h1>
       <form onSubmit={handleJoinRoom} className="input-container">
         <input
           value={email}
@@ -49,6 +51,15 @@ function Homepage() {
         />
         <button type="submit">Enter Room</button>
       </form>
+      <Toaster
+        position={window.innerWidth >= 1024 ? "bottom-right" : "top-center"}
+        toastOptions={{
+          style: {
+            background: "#fff",
+            color: "#333",
+          },
+        }}
+      />
     </div>
   );
 }

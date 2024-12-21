@@ -29,6 +29,7 @@ io.on('connection', (socket) => {
   socket.on("call-user", ({ emailId, offer }) => {
     const fromEmail = socketToEmailMapping.get(socket.id)
     const socketId = emailToSocketMapping.get(emailId)
+    console.log(`call-user from ${fromEmail} to ${emailId}`)
     socket.to(socketId).emit("incoming-call", { from: fromEmail, offer })
   })
 
